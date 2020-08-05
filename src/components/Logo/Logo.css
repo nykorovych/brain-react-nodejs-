@@ -1,0 +1,8 @@
+.Titlt {
+  background: linear-gradient(
+    90deg,
+    rgba(91, 113, 113, 0.9108018207282913) 0%,
+    rgba(43, 43, 199, 1) 35%,
+    rgba(28, 125, 144, 1) 100%
+  );
+}
