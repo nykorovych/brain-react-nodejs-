@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 import Clarifai from "clarifai";
 
 import Particles from "react-particles-js";
@@ -31,26 +31,47 @@ class App extends React.Component {
     this.state = {
       input: "",
       imageUrl: "",
+      box: {},
     };
   }
+  calculateFaceLocation = (data) => {
+    console.log(data);
+    const clarifaiFace =
+      data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById("imputimage");
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - clarifaiFace.right_col * width,
+      bottomRow: height - clarifaiFace.bottom_row * height,
+    };
+  };
+  displayFaceBox = (box) => {
+    this.setState({ box });
+  };
+
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
     console.log(app.models);
     app.models
-      .predict(
-        Clarifai.COLOR_MODEL,
-        this.state.input
-      )
+      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
       .then((response) => {
         console.log(response);
+        this.displayFaceBox(this.calculateFaceLocation(response))
+      .catch((err) =>
+          console.log(err)
+        );
       })
       .catch((err) => {
         console.log(err);
       });
   };
   onInputChange = (e) => {
-    this.setState({input: e.target.value})
+    this.setState({ input: e.target.value });
   };
+
   render() {
     return (
       <div className="App">
@@ -62,7 +83,7 @@ class App extends React.Component {
           onButtonSubmit={this.onButtonSubmit}
           onInputChange={this.onInputChange}
         />
-        <FaceRecognition imageUrl={this.state.imageUrl} />
+        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
       </div>
     );
   }
