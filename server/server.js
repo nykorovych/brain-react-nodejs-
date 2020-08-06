@@ -1,9 +1,51 @@
-const express = require('express')
+const express = require("express");
+const bodyParser = require("body-parser");
 
-const app = express()
+const app = express();
+app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    res.send('working')
-})
+const database = {
+  users: [
+    {
+      id: "123",
+      name: "sally",
+      email: "sally@gmail.com",
+      password: "bannanas",
+      entries: "0",
+      joined: new Date(),
+    },
+    {
+      id: "124",
+      name: "Jhon",
+      email: "jhon@gmail.com",
+      password: "bannanas",
+      entries: "0",
+      joined: new Date(),
+    },
+  ],
+};
 
-app.listen(3000, () => console.log('Server UP'))
+app.get("/", (req, res) => {
+  res.send(database.users);
+});
+app.post("/signin", (req, res) => {
+  res.json("signin");
+});
+
+app.post("/register", (req, res) => {
+  const { email, name, password } = req.body;
+  database.users.push({
+    // id: `${database.users.id + 4}`,
+    id: "127",
+    name: name,
+    email: email,
+    password: password,
+    entries: "0",
+    joined: new Date(),
+  });
+  res.json(database.users[database.users.length - 1]);
+
+
+});
+
+app.listen(3000, () => console.log("Server UP"));
