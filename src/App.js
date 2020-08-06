@@ -10,6 +10,8 @@ import Logo from "./components/Logo/Logo";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import Rank from "./components/Rank/Rank";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
+import Signin from "./components/Signin/Signin";
+import Register from "./components/Register/Register";
 
 const particlesOptions = {
   particles: {
@@ -59,8 +61,7 @@ class App extends React.Component {
       .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
       .then((response) => {
         console.log(response);
-        this.displayFaceBox(this.calculateFaceLocation(response))
-      .catch((err) =>
+        this.displayFaceBox(this.calculateFaceLocation(response)).catch((err) =>
           console.log(err)
         );
       })
@@ -77,6 +78,7 @@ class App extends React.Component {
       <div className="App">
         <Particles className="particles" params={particlesOptions} />
         <Navigation />
+        {this.state.input ? <Signin /> : <Register></Register>}
         <Logo />
         <Rank />
         <ImageLinkForm
