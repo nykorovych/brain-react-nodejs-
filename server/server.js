@@ -44,8 +44,28 @@ app.post("/register", (req, res) => {
     joined: new Date(),
   });
   res.json(database.users[database.users.length - 1]);
+});
 
+app.get("/profile/:id", (req, res) => {
+  const { id } = req.params;
+  database.users.forEach((u) => {
+    if (u.id === id) {
+      return res.json(u);
+    }
+  });
+  return res.json("No");
+});
 
+app.put("/image", (req, res) => {
+    console.log(req.body)
+  const { id } = req.body;
+  database.users.forEach((u) => {
+    if (u.id === id) {
+        u.entries++
+      return res.json(u.entries);
+    }
+  });
+  return res.json("NoOOOOooooOOooOoOoOoooOO");
 });
 
 app.listen(3000, () => console.log("Server UP"));
